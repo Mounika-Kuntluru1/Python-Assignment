@@ -1,0 +1,75 @@
+Task 3: MySQL Database Operations with Python 
+Problem Statement:
+Your task is to write a Python program that accomplishes the following:
+First create a database , table and add these column ‘student_id’, ‘first_name’, ‘last_name’,
+‘age’, ‘grade’.
+Connects to your MySQL database with python.
+Inserts a new student record into the "students" table with the following details:
+First Name: "Alice"
+Last Name: "Smith"
+Age: 18
+Grade: 95.5
+Updates the grade of the student with the first name "Alice" to 97.0.
+Deletes the student with the last name "Smith."
+Fetches and displays all student records from the "students" table.
+Code
+First we have to use mysql-connector library in python for connecting to the MYSQL Database. 
+So Install the library 
+pip install mysql-connector-python
+Python Code:
+import mysql.connector
+# Connect to MySQL database
+db_connection = mysql.connector.connect(
+ host="your_host",
+ user="your_username",
+ password="your_password",
+ database="your_database"
+)
+# Create a cursor object to execute SQL queries
+cursor = db_connection.cursor()
+# Create "students" table
+create_table_query = """
+CREATE TABLE IF NOT EXISTS students (
+ student_id INT AUTO_INCREMENT PRIMARY KEY,
+ first_name VARCHAR(255),
+ last_name VARCHAR(255),
+ age INT,
+ grade FLOAT
+)
+"""
+cursor.execute(create_table_query)
+# Insert a new student record
+insert_query = """
+INSERT INTO students (first_name, last_name, age, grade)
+VALUES ('Alice', 'Smith', 18, 95.5)
+"""
+cursor.execute(insert_query)
+# Commit changes to the database
+db_connection.commit()
+# Update the grade of the student with the first name "Alice"
+update_query = """
+UPDATE students
+SET grade = 97.0
+WHERE first_name = 'Alice'
+"""
+cursor.execute(update_query)
+# Commit changes to the database
+db_connection.commit()
+# Delete the student with the last name "Smith"
+delete_query = """
+DELETE FROM students
+WHERE last_name = 'Smith'
+"""
+cursor.execute(delete_query)
+# Commit changes to the database
+db_connection.commit()
+# Fetch and display all student records
+select_query = "SELECT * FROM students"
+cursor.execute(select_query)
+students = cursor.fetchall()
+print("\nAll Student Records:")
+for student in students:
+ print(student)
+# Close the cursor and database connection
+cursor.close()
+db_connection.close()
